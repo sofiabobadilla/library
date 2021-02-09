@@ -31,8 +31,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import Component from 'vue-class-component'
+import { Vue, Component, Emit } from 'vue-property-decorator'
 @Component
 export default class Client extends Vue {
   data() {
@@ -46,20 +45,22 @@ export default class Client extends Vue {
     }
   }
 
+  @Emit('create')
   saveNewClient(event) {
     event.preventDefault()
-    this.$emit('create', {
+    const newClient = {
       name: this.currentClient.name,
       birth: this.currentClient.birth,
       email: this.currentClient.email,
       canReserve: this.currentClient.canReserve,
-    })
+    }
     this.currentClient = {
       name: '',
       birth: new Date(),
       email: '',
       canReserve: true,
     }
+    return newClient
   }
 }
 </script>
