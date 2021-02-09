@@ -43,25 +43,12 @@
 
 <script>
 // Define the props by using Vue's canonical way.
-import { Vue, Component, Emit } from 'vue-property-decorator'
-const ReservationProps = Vue.extend({
-  props: {
-    books: {
-      type: Array,
-      default: () => [],
-    },
-    clients: {
-      type: Array,
-      default: () => [],
-    },
-    reservations: {
-      type: Array,
-      default: () => [],
-    },
-  },
-})
+import { Vue, Component, Emit, Prop } from 'vue-property-decorator'
 @Component
-export default class Reservation extends ReservationProps {
+export default class Reservation extends Vue {
+  @Prop({ default: '() => []' }) books: Array
+  @Prop({ default: '() => []' }) clients: Array
+  @Prop({ default: '() => []' }) reservations: Array
   data() {
     return {
       currentReservation: {
