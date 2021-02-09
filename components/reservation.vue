@@ -43,8 +43,8 @@
 
 <script>
 // Define the props by using Vue's canonical way.
-
-export default {
+import { Vue, Component, Emit } from 'vue-property-decorator'
+const ReservationProps = Vue.extend({
   props: {
     books: {
       type: Array,
@@ -59,6 +59,9 @@ export default {
       default: () => [],
     },
   },
+})
+@Component
+export default class Reservation extends ReservationProps {
   data() {
     return {
       currentReservation: {
@@ -68,77 +71,75 @@ export default {
         client: null,
       },
     }
-  },
-  methods: {
-    calculateAge(birthday) {
-      // Debe estar en formato YYYY-MM-DD
-      const age = new Date().getFullYear() - birthday.getFullYear()
-      const m = new Date().getMonth() - birthday.getMonth()
-      if (m < 0 || (m === 0 && new Date().getDate() < birthday.getDate())) {
-        return age - 1
-      }
-      return age
-    },
+  }
 
-    saveReservation(event) {
-      event.preventDefault()
-      const clientAge = this.calculateAge(this.currentReservation.client.birth)
-      this.checkedOtherReservations()
-      console.log(this.currentReservation.client)
-      if (clientAge < 18 && this.currentReservation.book.explicit === true) {
-        this.$buefy.notification.open(
-          'No puedes reservar este libro por ser menor de edad'
-        )
-      } else if (this.currentReservation.book.stock < 1) {
-        this.$buefy.notification.open('Libro sin stock')
-      } else if (this.currentReservation.client.canReserve === false) {
-        this.$buefy.notification.open(
-          'No puedes reservar porque tienes libros pendientes a entregar'
-        )
-      } else {
-        this.$emit('create', {
-          deliver: Intl.DateTimeFormat(undefined, { timezome: 'UTC' }).format(
-            this.currentReservation.dates[0]
-          ),
-          return: Intl.DateTimeFormat(undefined, { timezome: 'UTC' }).format(
-            this.currentReservation.dates[1]
-          ),
-          book: this.currentReservation.book,
-          email: this.currentReservation.client.email,
-          client: this.currentReservation.client,
-        })
-        this.currentReservation.book.stock--
-        this.currentReservation = {
-          deliver: new Date(),
-          return: new Date(),
-          book: null,
-          email: '',
-          client: null,
-        }
+  calculateAge(birthday) {
+    // Debe estar en formato YYYY-MM-DD
+    const age = new Date().getFullYear() - birthday.getFullYear()
+    const m = new Date().getMonth() - birthday.getMonth()
+    if (m < 0 || (m === 0 && new Date().getDate() < birthday.getDate())) {
+      return age - 1
+    }
+    return age
+  }
 
-        this.$buefy.notification.open('La reserva se realizó correctamente')
-      }
-    },
-
-    checkedOtherReservations() {
-      console.log(this.currentReservation.client.name)
-      this.currentReservation.client.canReserve = true
-      this.reservations.forEach(this.Reserve)
-      // this.currentReservation.client.canReserve=false
-    },
-
-    Reserve(item) {
-      const today = Intl.DateTimeFormat(undefined, { timezome: 'UTC' }).format(
-        new Date()
+  @Emit('create')
+  saveReservation(event) {
+    event.preventDefault()
+    const clientAge = this.calculateAge(this.currentReservation.client.birth)
+    this.checkedOtherReservations()
+    if (clientAge < 18 && this.currentReservation.book.explicit === true) {
+      this.$buefy.notification.open(
+        'No puedes reservar este libro por ser menor de edad'
       )
-      if (
-        item.client.name === this.currentReservation.client.name &&
-        item.return < today
-      ) {
-        this.currentReservation.client.canReserve = false
+    } else if (this.currentReservation.book.stock < 1) {
+      this.$buefy.notification.open('Libro sin stock')
+    } else if (this.currentReservation.client.canReserve === false) {
+      this.$buefy.notification.open(
+        'No puedes reservar porque tienes libros pendientes a entregar'
+      )
+    } else {
+      const newReservation = {
+        deliver: Intl.DateTimeFormat(undefined, { timezome: 'UTC' }).format(
+          this.currentReservation.dates[0]
+        ),
+        return: Intl.DateTimeFormat(undefined, { timezome: 'UTC' }).format(
+          this.currentReservation.dates[1]
+        ),
+        book: this.currentReservation.book,
+        email: this.currentReservation.client.email,
+        client: this.currentReservation.client,
       }
-    },
-  },
+      this.currentReservation.book.stock--
+      this.currentReservation = {
+        deliver: new Date(),
+        return: new Date(),
+        book: null,
+        email: '',
+        client: null,
+      }
+      this.$buefy.notification.open('La reserva se realizó correctamente')
+      return newReservation
+    }
+  }
+
+  checkedOtherReservations() {
+    this.currentReservation.client.canReserve = true
+    this.reservations.forEach(this.Reserve)
+    // this.currentReservation.client.canReserve=false
+  }
+
+  Reserve(item) {
+    const today = Intl.DateTimeFormat(undefined, { timezome: 'UTC' }).format(
+      new Date()
+    )
+    if (
+      item.client.name === this.currentReservation.client.name &&
+      item.return < today
+    ) {
+      this.currentReservation.client.canReserve = false
+    }
+  }
 }
 </script>
 

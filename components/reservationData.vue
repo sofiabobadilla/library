@@ -31,13 +31,18 @@
 </template>
 
 <script>
-export default {
+import Vue from 'vue'
+import Component from 'vue-class-component'
+const ReservationDataProps = Vue.extend({
   props: {
     reservations: {
       type: Array,
       default: () => [],
     },
-  },
+  }
+})
+@Component
+export default class ReservationData extends ReservationDataProps {
   data() {
     return {
       columns: [
@@ -58,13 +63,12 @@ export default {
         { field: 'actions', label: 'actions' },
       ],
     }
-  },
-  methods: {
-    DeleteReservation(row) {
+  }
+  DeleteReservation(row) {
       row.book.stock++
       const index = this.reservations.indexOf(row)
       this.reservations.splice(index, 1)
-    },
-  },
+    }
+  
 }
 </script>

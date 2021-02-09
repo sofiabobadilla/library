@@ -33,8 +33,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import Component from 'vue-class-component'
+import { Vue, Component, Emit } from 'vue-property-decorator'
 @Component
 export default class Client extends Vue {
   data() {
@@ -49,15 +48,16 @@ export default class Client extends Vue {
     }
   }
 
+  @Emit('create')
   saveBook(event) {
     event.preventDefault()
-    this.$emit('create', {
+    const newBook = {
       title: this.currentBook.title,
       author: this.currentBook.author,
       publicationDate: this.currentBook.publicationDate,
       stock: this.currentBook.stock,
       explicit: this.currentBook.explicit,
-    })
+    }
     this.currentBook = {
       title: '',
       author: '',
@@ -65,6 +65,7 @@ export default class Client extends Vue {
       stock: 10,
       explicit: false,
     }
+    return newBook
   }
 }
 </script>

@@ -15,6 +15,7 @@
       </b-tab-item>
       <b-tab-item label="Ingresar un nuevo libro">
         <book @create="saveBook"></book>
+        <back></back>
       </b-tab-item>
       <b-tab-item label="Crear un nuevo cliente">
         <client @create="saveNewClient"></client>
@@ -28,8 +29,9 @@ import book from '@/components/book.vue'
 import reservation from '@/components/reservation.vue'
 import client from '@/components/client.vue'
 import ReservationData from '@/components/reservationData.vue'
+import back from '@/components/back.vue'
 export default {
-  components: { reservation, book, client, ReservationData },
+  components: { reservation, book, client, ReservationData ,back },
   data() {
     return {
       clients: [
