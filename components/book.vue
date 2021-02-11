@@ -32,24 +32,20 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { Vue, Component, Emit } from 'vue-property-decorator'
 @Component
 export default class Client extends Vue {
-  data() {
-    return {
-      currentBook: {
-        title: '',
-        author: '',
-        publicationDate: new Date(),
-        stock: 10,
-        explicit: true,
-      },
-    }
+  currentBook: { [key: string]: any } = {
+    title: '',
+    author: '',
+    publicationDate: new Date(),
+    stock: 10,
+    explicit: true,
   }
 
   @Emit('create')
-  saveBook(event) {
+  saveBook(event: Event) {
     event.preventDefault()
     const newBook = {
       title: this.currentBook.title,

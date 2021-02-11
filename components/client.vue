@@ -30,23 +30,19 @@
   </section>
 </template>
 
-<script>
+<script lang="ts">
 import { Vue, Component, Emit } from 'vue-property-decorator'
 @Component
 export default class Client extends Vue {
-  data() {
-    return {
-      currentClient: {
-        name: '',
-        birth: new Date(),
-        email: '',
-        canReserve: true,
-      },
-    }
+  currentClient: { [key: string]: any } = {
+    name: '',
+    birth: new Date(),
+    email: '',
+    canReserve: true,
   }
 
   @Emit('create')
-  saveNewClient(event) {
+  saveNewClient(event: Event) {
     event.preventDefault()
     const newClient = {
       name: this.currentClient.name,

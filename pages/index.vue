@@ -1,8 +1,20 @@
 <template>
   <section>
-    <div :style="{ color: 'blue', fontSize: '30px' }">
+    <div
+      :style="{ color: 'black', fontSize: '30px', backgroundColor: ' #faa4c3' }"
+    >
       <h1>¡Bienvenid@ al sistema virtual de reservas!</h1>
     </div>
+    <p></p>
+
+    <b-field grouped>
+      <back></back>
+    </b-field>
+    <p
+      :style="{ color: 'purple', fontSize: '20px', backgroundColor: '#e0f1ef' }"
+    >
+      Selecciona una pestaña para realizar la acción correspondiente
+    </p>
     <b-tabs>
       <b-tab-item label="Reservar">
         <reservation
@@ -15,7 +27,6 @@
       </b-tab-item>
       <b-tab-item label="Ingresar un nuevo libro">
         <book @create="saveBook"></book>
-        <back></back>
       </b-tab-item>
       <b-tab-item label="Crear un nuevo cliente">
         <client @create="saveNewClient"></client>
@@ -24,92 +35,93 @@
   </section>
 </template>
 
-<script>
+<script lang="ts">
 import book from '@/components/book.vue'
 import reservation from '@/components/reservation.vue'
 import client from '@/components/client.vue'
-import ReservationData from '@/components/reservationData.vue'
+import reservationData from '@/components/reservationData.vue'
 import back from '@/components/back.vue'
-export default {
-  components: { reservation, book, client, ReservationData ,back },
-  data() {
-    return {
-      clients: [
-        {
-          name: 'Sofía Bobadilla Ponce',
-          birth: new Date(2019, 9, 14),
-          email: 'sofia@gmail.com',
-          canReserve: true,
-        },
-        {
-          name: 'Dora La Exploradora',
-          birth: new Date(1989, 9, 14),
-          email: 'zorronotelolleves@gmail.com',
-          canReserve: true,
-        },
-        {
-          name: 'Billy',
-          birth: new Date(2019, 9, 14),
-          email: 'billy@gmail.com',
-          canReserve: true,
-        },
-        {
-          name: 'Agnes Bobadilla Reyes',
-          birth: new Date(2020, 11, 20),
-          email: 'agnolia@gmail.com',
-          canReserve: true,
-        },
-      ],
-      reservations: [],
-      books: [
-        {
-          title: 'Sapiens',
-          author: 'Yuval Noah Harari',
-          publicationDate: new Date(2011, 0, 1),
-          stock: 10,
-          explicit: false,
-        },
-        {
-          title: 'Orgullo y Prejuicio',
-          author: 'Jane Austen',
-          publicationDate: new Date(1813, 0, 28),
-          stock: 100,
-          explicit: false,
-        },
-        {
-          title: 'La bailarina de Auschwitz',
-          author: 'Edith Eger',
-          publicationDate: new Date(2017, 8, 5),
-          stock: 10,
-          explicit: true,
-        },
-        {
-          title: 'El hombre que calculaba',
-          author: 'Malba Tahan',
-          publicationDate: new Date(2007, 2, 1),
-          stock: 100,
-          explicit: false,
-        },
-        {
-          title: 'De Animales  Dioses',
-          author: 'Yuval Noah Harari',
-          publicationDate: new Date(2014, 0, 28),
-          stock: 100,
-          explicit: false,
-        },
-      ],
-    }
-  },
-  methods: {
-    saveReservation(reservation) {
-      this.reservations.push(reservation)
+import { Vue, Component } from 'vue-property-decorator'
+@Component({
+  components: { reservation, book, client, reservationData, back },
+})
+export default class Index extends Vue {
+  clients: { [key: string]: any } = [
+    {
+      name: 'Sofía Bobadilla Ponce',
+      birth: new Date(2019, 9, 14),
+      email: 'sofia@gmail.com',
+      canReserve: true,
     },
-    saveBook(book) {
-      this.books.push(book)
+    {
+      name: 'Dora La Exploradora',
+      birth: new Date(1989, 9, 14),
+      email: 'zorronotelolleves@gmail.com',
+      canReserve: true,
     },
-    saveNewClient(client) {
-      this.clients.push(client)
+    {
+      name: 'Billy',
+      birth: new Date(2019, 9, 14),
+      email: 'billy@gmail.com',
+      canReserve: true,
     },
-  },
+    {
+      name: 'Agnes Bobadilla Reyes',
+      birth: new Date(2020, 11, 20),
+      email: 'agnolia@gmail.com',
+      canReserve: true,
+    },
+  ]
+
+  reservations: { [key: string]: any } = []
+  books: { [key: string]: any } = [
+    {
+      title: 'Sapiens',
+      author: 'Yuval Noah Harari',
+      publicationDate: new Date(2011, 0, 1),
+      stock: 10,
+      explicit: false,
+    },
+    {
+      title: 'Orgullo y Prejuicio',
+      author: 'Jane Austen',
+      publicationDate: new Date(1813, 0, 28),
+      stock: 100,
+      explicit: false,
+    },
+    {
+      title: 'La bailarina de Auschwitz',
+      author: 'Edith Eger',
+      publicationDate: new Date(2017, 8, 5),
+      stock: 10,
+      explicit: true,
+    },
+    {
+      title: 'El hombre que calculaba',
+      author: 'Malba Tahan',
+      publicationDate: new Date(2007, 2, 1),
+      stock: 100,
+      explicit: false,
+    },
+    {
+      title: 'De Animales  Dioses',
+      author: 'Yuval Noah Harari',
+      publicationDate: new Date(2014, 0, 28),
+      stock: 100,
+      explicit: false,
+    },
+  ]
+
+  saveReservation(reservation: Array<reservation>) {
+    this.reservations.push(reservation)
+  }
+
+  saveBook(book: Array<book>) {
+    this.books.push(book)
+  }
+
+  saveNewClient(client: Array<client>) {
+    this.clients.push(client)
+  }
 }
 </script>
