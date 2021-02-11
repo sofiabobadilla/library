@@ -1,6 +1,6 @@
 <template>
   <section>
-    <form action="" @submit="saveReservation">
+    <form action="" @submit="saveReservations">
       <div>
         <b-field grouped>
           <b-field label="Selecciona al cliente ">
@@ -19,12 +19,7 @@
             </b-select>
           </b-field>
           <b-field label="Selecciona un libro de la lista">
-            <b-select
-              v-model="currentReservation.booksList"
-              multiple
-              icon="book"
-              required
-            >
+            <b-select v-model="booksList" multiple icon="book" required>
               <option v-for="(item, index) in books" :key="index" :value="item">
                 {{ item.title }}
               </option>
@@ -38,7 +33,6 @@
               required
             >
             </b-datepicker>
-            <p>{{ currentReservation.book }}</p>
           </b-field>
         </b-field>
         <b-button type="is-info" native-type="submit">Guardar Reserva</b-button>
@@ -59,10 +53,12 @@ export default class Reservation extends Vue {
   @Prop({ required: true }) reservations
   currentReservation: { [key: string]: any } = {
     dates: [],
-    booksList: [],
+    book: null,
     email: '',
     client: null,
   }
+
+  booksList: [] = []
 
   calculateAge(birthday: Date) {
     // Debe estar en formato YYYY-MM-DD
@@ -74,42 +70,27 @@ export default class Reservation extends Vue {
     return age
   }
 
-  saveReservation(event: Event) {
+  saveReservations(event: Event) {
     event.preventDefault()
+    this.booksList.forEach((element: book) => this.saveReservation(element))
+  }
+
+  saveReservation(book: any) {
     const clientAge = this.calculateAge(this.currentReservation.client.birth)
     this.checkOtherReservations()
-    const booksExplicity = this.currentReservation.booksList.forEach(
-      (element: book) => {
-        this.checkIfExplicit(element)
-      }
-    )
-    const booksStock = this.currentReservation.booksList.forEach(
-      (element: book) => {
-        this.checkStock(element)
-      }
-    )
-    if (clientAge < 18 && booksExplicity === true) {
-      alert('No puedes reservar este libro por ser menor de edad')
-    } else if (booksStock) {
-      alert('Libro sin stock')
+    if (clientAge < 18 && book.explicit === true) {
+      alert(
+        'El libro ' +
+          book.title +
+          ' solo lo puede reservar una persona mayor de edad'
+      )
+    } else if (book.stock < 1) {
+      alert('El libro ' + book.title + ' se encuentra sin stock')
     } else if (this.currentReservation.client.canReserve === false) {
       alert('No puedes reservar porque tienes libros pendientes a entregar')
     } else {
+      this.currentReservation.book = book
       this.pushReservation()
-    }
-  }
-
-  checkStock(book: book) {
-    if (book.stock < 1) {
-      alert('El libro ' + book.title + ' se encuentra sin stock')
-      return false
-    }
-  }
-
-  checkIfExplicit(book: book) {
-    if (book.explicit === true) {
-      alert('El libro ' + book.title + ' solo lo puede reservar una persona mayor de edad')
-      return true
     }
   }
 
@@ -122,13 +103,12 @@ export default class Reservation extends Vue {
       return: Intl.DateTimeFormat(undefined, { timeZone: 'UTC' }).format(
         this.currentReservation.dates[1]
       ),
-      booksList: this.currentReservation.booksList,
+      book: this.currentReservation.book,
       email: this.currentReservation.client.email,
       client: this.currentReservation.client,
     }
-    this.currentReservation.booksList.forEach((element: book) => {
-      element.stock--
-    })
+    this.currentReservation.book.stock--
+
     return newReservation
   }
 

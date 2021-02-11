@@ -9,7 +9,7 @@
         {{ reservations.row.client.name }}
       </b-table-column>
       <b-table-column v-slot="reservations" field="book" label="Libro">
-        {{ reservations.row.booksList[0] }}
+        {{ reservations.row.book.title}}
       </b-table-column>
       <b-table-column
         v-slot="reservations"
@@ -49,8 +49,6 @@ export default class reservationData extends Vue {
   @Prop({ required: true })
   reservations!: Array<reservation>
 
-  listOfBooks: [] = []
-
   columns: {} = [
     {
       field: 'deliver',
@@ -60,7 +58,7 @@ export default class reservationData extends Vue {
       field: 'return',
       label: 'return',
     },
-    { field: 'bookTitle', label: 'book reserved' },
+    { field: 'book.title', label: 'book reserved' },
     {
       field: 'email',
       label: 'email',
@@ -69,9 +67,6 @@ export default class reservationData extends Vue {
     { field: 'actions', label: 'actions' },
   ]
 
-  listOfBookNames(book: any) {
-    this.listOfBooks.push(book.title)
-  }
 
   DeleteReservation(row: any) {
     row.books.stock++

@@ -17,12 +17,15 @@
     </p>
     <b-tabs>
       <b-tab-item label="Reservar">
-        <reservation
-          :books="books"
-          :clients="clients"
-          :reservations="reservations"
-          @create="saveReservation"
-        ></reservation>
+        <b-field v-for="(stop, index) in stops" :key="index" :value="stop">
+          <reservation
+            :books="books"
+            :clients="clients"
+            :reservations="reservations"
+            @create="saveReservation"
+          ></reservation>
+        </b-field>
+        <b-button type="is-info" @click="Add"> agregar otra reserva</b-button>
         <reservation-data :reservations="reservations"></reservation-data>
       </b-tab-item>
       <b-tab-item label="Ingresar un nuevo libro">
@@ -36,8 +39,8 @@
 </template>
 
 <script lang="ts">
-import book from '@/components/book.vue'
 import reservation from '@/components/reservation.vue'
+import book from '@/components/book.vue'
 import client from '@/components/client.vue'
 import reservationData from '@/components/reservationData.vue'
 import back from '@/components/back.vue'
@@ -46,6 +49,7 @@ import { Vue, Component } from 'vue-property-decorator'
   components: { reservation, book, client, reservationData, back },
 })
 export default class Index extends Vue {
+  stops: [] = []
   clients: { [key: string]: any } = [
     {
       name: 'Sofía Bobadilla Ponce',
@@ -122,6 +126,10 @@ export default class Index extends Vue {
 
   saveNewClient(client: Array<client>) {
     this.clients.push(client)
+  }
+
+  Add() {
+    this.stops.push('1')
   }
 }
 </script>
