@@ -6,7 +6,7 @@
           <b-input v-model="currentBook.title" icon="text" required></b-input>
         </b-field>
         <b-field label="Autor">
-          <b-input v-model="currentBook.author" icon="text" required></b-input>
+          <b-input v-model="currentBook.author" placeholder="blablabla" icon="text" required></b-input>
         </b-field>
 
         <b-field label="Fecha de Publicación">

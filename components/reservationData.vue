@@ -69,7 +69,7 @@ export default class reservationData extends Vue {
 
 
   DeleteReservation(row: any) {
-    row.books.stock++
+    row.book.stock++
     const index = this.reservations.indexOf(row)
     this.reservations.splice(index, 1)
   }

@@ -1,5 +1,6 @@
 <template>
   <section>
+    <div id="a">cacacac</div>
     <b-field grouped group-multiline>
       <b-button
         label="Clear checked"
@@ -114,6 +115,12 @@ export default {
       const ind = this.data.indexOf(element)
       console.log(ind + element)
       return ind
+    },
+    Add() {
+      const newR = document.createElement('div')
+      // eslint-disable-next-line no-console
+      const actR = document.getElementById('mother')
+      actR?.appendChild(newR)
     },
   },
 }
