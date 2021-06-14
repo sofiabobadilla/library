@@ -1,5 +1,7 @@
 # library
-
+This is a tutorial project made by me during my first work as a trainee in SnowConsulting.
+The main idea was to practice VueJS with Nuxt in order to apply later in a real project,
+I hope you can use it to learn about the use of props and VueJS, is a very usefull tool.
 ## Build Setup
 
 ```bash
